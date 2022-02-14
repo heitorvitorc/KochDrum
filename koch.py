@@ -2,10 +2,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# ignore warnings
-import warnings
-warnings.filterwarnings("ignore")
-
 def rotate(p, origin=(0, 0), angle=0):
     """
     Angle in radians
@@ -21,7 +17,6 @@ def rotate(p, origin=(0, 0), angle=0):
 def add_segment(start, end):
     """
     Segments a line to Koch line, creating fractals.
-  
     """
    
     # the length of the segment
@@ -86,22 +81,35 @@ def koch_fractal(points, level):
         return newpts
     else:
         return koch_fractal(newpts, level-1)
+
+def generate_koch(points, level):
+    if level == 0:
+        pts = points
+    else:
+        pts = koch_fractal(points, level-1)
     
+    pts = np.asarray(pts)
+    return pts
 
-A = [0., 0.]
-B = [1., 0.]
-C = [1., 1.,]
-D = [0., 1.]
-pts0 = [A, B, C, D, A]
+if __name__ == "__main__":
 
-level = 6
-points_rec = koch_fractal(pts0, level)
+    A = [0., 0.]
+    B = [1., 0.]
+    C = [1., 1.,]
+    D = [0., 1.]
+    pts0 = [A, B, C, D, A]
 
-pts0 = np.asarray(pts0)
-points = np.asarray(points_rec)
+    level = 1
+    points = generate_koch(pts0, level)
+    # points_rec = koch_fractal(pts0, level)
 
-plt.plot(pts0[:,0],pts0[:,1], label = 'level 0'); plt.legend()
-plt.plot(points[:,0],points[:,1], label = 'level '+ str(level)); plt.legend()
+    pts0 = np.asarray(pts0)
+    # points = np.asarray(points_rec)
 
-plt.show()
-k = 1
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(pts0[:,0],pts0[:,1], label = 'level 0'); plt.legend()
+    ax.plot(points[:,0],points[:,1], label = 'level '+ str(level)); plt.legend()
+    ax.set_aspect("equal", "box")
+    plt.show()
+    k = 1
